@@ -1,40 +1,104 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-  <title>AI Resume Analyzer</title>
-</head>
-<body>
+  <head>
+    <title>AI Resume Analyzer</title>
 
-<h2>Resume Analyzer</h2>
+    <style>
+      body {
+        font-family: Arial;
+        background: linear-gradient(to right, #667eea, #764ba2);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+      }
 
-<textarea id="resume" rows="10" cols="50" placeholder="Paste resume text..."></textarea><br><br>
+      .container {
+        background: white;
+        padding: 30px;
+        border-radius: 12px;
+        width: 450px;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      }
 
-<button onclick="analyze()">Analyze</button>
+      textarea {
+        width: 100%;
+        padding: 10px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        margin-bottom: 15px;
+      }
 
-<h3>Skills:</h3>
-<p id="skills"></p>
+      button {
+        padding: 10px 20px;
+        background: #667eea;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
 
-<h3>Job Suggestions:</h3>
-<p id="jobs"></p>
+      button:hover {
+        background: #5a67d8;
+      }
 
-<script>
-async function analyze() {
-  const text = document.getElementById("resume").value;
+      .result {
+        margin-top: 20px;
+        text-align: left;
+      }
+    </style>
+  </head>
 
-  const res = await fetch("http://localhost:3000/analyze", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ text })
-  });
+  <body>
+    <div class="container">
+      <h2>📄 AI Resume Analyzer</h2>
 
-  const data = await res.json();
+      <textarea
+        id="resume"
+        rows="8"
+        placeholder="Paste your resume text here..."
+      ></textarea>
 
-  document.getElementById("skills").innerText = data.skills.join(", ");
-  document.getElementById("jobs").innerText = data.jobs.join(", ");
-}
-</script>
+      <button onclick="analyze()">Analyze Resume Now</button>
 
-</body>
+      <div class="result">
+        <h3>🧠 Skills:</h3>
+        <p id="skills"></p>
+
+        <h3>💼 Jobs:</h3>
+        <p id="jobs"></p>
+
+        <h3>⚡ Suggestions:</h3>
+        <p id="suggestions"></p>
+      </div>
+    </div>
+
+    <script>
+      async function analyze() {
+        const text = document.getElementById("resume").value;
+
+        if (!text) {
+          alert("Please paste your resume");
+          return;
+        }
+
+        const res = await fetch("http://localhost:3000/analyze", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ text }),
+        });
+
+        const data = await res.json();
+
+        document.getElementById("skills").innerText = data.skills.join(", ");
+        document.getElementById("jobs").innerText = data.jobs.join(", ");
+        document.getElementById("suggestions").innerText =
+          data.suggestions.join(", ");
+      }
+    </script>
+  </body>
 </html>
