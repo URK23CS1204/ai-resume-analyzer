@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>AI Resume Analyzer</title>
+</head>
+<body>
+
+<h2>Resume Analyzer</h2>
+
+<textarea id="resume" rows="10" cols="50" placeholder="Paste resume text..."></textarea><br><br>
+
+<button onclick="analyze()">Analyze</button>
+
+<h3>Skills:</h3>
+<p id="skills"></p>
+
+<h3>Job Suggestions:</h3>
+<p id="jobs"></p>
+
+<script>
+async function analyze() {
+  const text = document.getElementById("resume").value;
+
+  const res = await fetch("http://localhost:3000/analyze", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ text })
+  });
+
+  const data = await res.json();
+
+  document.getElementById("skills").innerText = data.skills.join(", ");
+  document.getElementById("jobs").innerText = data.jobs.join(", ");
+}
+</script>
+
+</body>
+</html>
