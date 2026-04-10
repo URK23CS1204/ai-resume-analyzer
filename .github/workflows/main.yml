@@ -1,15 +1,15 @@
-name: CI Pipeline
+name: CI/CD Pipeline
 
 on:
   push:
     branches: [ "main" ]
 
 jobs:
-  build:
+  build-test-deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
+    - name: Checkout Code
       uses: actions/checkout@v3
 
     - name: Setup Node.js
@@ -17,12 +17,21 @@ jobs:
       with:
         node-version: 18
 
-    - name: Install dependencies
+    - name: Install Dependencies
       run: |
         cd backend
         npm install
+
+    - name: Run Tests
+      run: |
+        echo "Running tests..."
+        echo "No tests yet"
 
     - name: Build Docker Image
       run: |
         cd backend
         docker build -t resume-analyzer-backend .
+
+    - name: Deploy Step
+      run: |
+        echo "Deploying application..."
